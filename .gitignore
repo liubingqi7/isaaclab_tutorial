@@ -1,0 +1,10 @@
+# Local source material. Do not publish the book PDF in the reader-facing repo.
+*.pdf
+
+# Python/cache artifacts.
+__pycache__/
+*.py[cod]
+
+# Local editor and OS files.
+.DS_Store
+.vscode/
