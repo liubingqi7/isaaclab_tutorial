@@ -106,6 +106,31 @@ cd ~/isaaclab_sources/IsaacLab-v2.3.0
 
 如果 `--help` 能正常输出，说明 Isaac Lab 的 Python 入口、脚本路径和依赖发现基本正确。真正启动仿真时还会继续检查 GPU、驱动、Isaac Sim Kit 缓存和图形后端，因此它比命令行入口检查更依赖机器环境。
 
+## 常见问题：inotify 上限
+
+Isaac Sim Kit 启动时会为扩展目录、缓存目录和项目源码创建文件变化监控。如果系统中的编辑器或远程开发工具已经占用了大量 inotify watch，可能出现如下错误：
+
+```text
+Failed to create change watch ... errno=28/No space left on device
+```
+
+这里的 `No space left on device` 不一定表示磁盘已满。Linux 的 `inotify_add_watch` 在 watch 数达到用户上限时也会返回 `ENOSPC`。先检查当前限制和占用：
+
+```bash
+scripts/ch07/check_inotify_usage.sh
+```
+
+如果 `total` 接近或超过 `max_user_watches`，可以提高 inotify 上限：
+
+```bash
+scripts/ch07/fix_inotify_limits.sh --print-only
+scripts/ch07/fix_inotify_limits.sh
+```
+
+该脚本会写入 `/etc/sysctl.d/99-isaaclab-inotify.conf`，需要 sudo 权限。修改后重新运行 `multi_asset.py`。
+
+相关资料可参考 Linux man-pages 中的 [`inotify_add_watch(2)`](https://man7.org/linux/man-pages/man2/inotify_add_watch.2.html) 与 [`inotify(7)`](https://man7.org/linux/man-pages/man7/inotify.7.html)。其中 `ENOSPC` 对应 watch 数达到限制，限制项由 `/proc/sys/fs/inotify/` 下的 `max_user_watches`、`max_user_instances` 和 `max_queued_events` 控制。
+
 ## 补充说明
 
 `carb`、`omni`、`pxr` 等模块属于 Isaac Sim Kit 运行时。它们通常不能在普通 Python 解释器中直接导入，需要通过 `isaaclab.sh` 或 `SimulationApp` 启动 Kit 后才会出现在运行环境中。因此，第七章的验证应以 `isaaclab.sh` 和示例脚本为入口，而不是只用普通 `python -c "import omni"` 判断环境是否正确。

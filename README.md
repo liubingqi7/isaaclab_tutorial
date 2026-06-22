@@ -9,9 +9,9 @@
 | 章节 | 内容 | 说明 |
 | --- | --- | --- |
 | [第 7 章](chapters/ch07_isaaclab_intro.md) | Isaac Lab 环境与源码结构 | 已整理 |
-| 第 8 章 | Isaac Lab 任务与强化学习入口 | 待整理 |
-| 第 9 章 | 人形机器人 locomotion 与动作追踪 | 待整理 |
-| 第 10 章 | Unitree 部署与 sim-to-real 流程 | 待整理 |
+| [第 8 章](chapters/ch08_isaaclab_rl_workflow.md) | Isaac Lab 任务与强化学习入口 | 已整理 |
+| [第 9 章](chapters/ch09_humanoid_locomotion_mimic.md) | 人形机器人 locomotion 与动作追踪 | 已整理 |
+| [第 10 章](chapters/ch10_unitree_deploy.md) | Unitree 部署与 sim-to-real 流程 | 已整理 |
 
 ## 仓库结构
 
@@ -21,9 +21,10 @@ isaaclab_tutorial/
 ├── chapters/
 │   └── ch07_isaaclab_intro.md
 └── scripts/
-    └── ch07/
-        ├── setup_isaaclab_v2_3.sh
-        └── check_isaaclab_install.sh
+    ├── ch07/
+    ├── ch08/
+    ├── ch09/
+    └── ch10/
 ```
 
 ## 环境约定
@@ -40,6 +41,7 @@ conda activate env_isaaclab_2.3_lbq
 scripts/ch07/setup_isaaclab_v2_3.sh ~/isaaclab_sources/IsaacLab-v2.3.0
 conda activate env_isaaclab_2.3_lbq
 scripts/ch07/check_isaaclab_install.sh ~/isaaclab_sources/IsaacLab-v2.3.0
+scripts/ch08/check_isaaclab_rl.sh ~/isaaclab_sources/IsaacLab-v2.3.0
 ```
 
 源码准备完成后，进入 Isaac Lab 目录运行书中的安装验证 demo：
@@ -48,3 +50,5 @@ scripts/ch07/check_isaaclab_install.sh ~/isaaclab_sources/IsaacLab-v2.3.0
 cd ~/isaaclab_sources/IsaacLab-v2.3.0
 ./isaaclab.sh -p scripts/demos/multi_asset.py --headless --num_envs 1
 ```
+
+如果遇到 `Failed to create change watch ... errno=28/No space left on device`，先查看第 7 章的 inotify 说明。
