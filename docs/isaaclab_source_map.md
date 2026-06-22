@@ -41,9 +41,9 @@ This map covers only the Isaac Lab portion of the book:
 - Book demo:
   - `scripts/demos/multi_asset.py`
 - Remote status:
-  - `/home/liubingqi/lbq/IsaacLab` exists.
-  - Remote checkout is `v2.2.1-199-g0aa7837e3a`, not exactly `v2.3.0`.
-  - There is an untracked file: `source/isaaclab/isaaclab/envs/mdp/Untitled`.
+  - Clean textbook checkout: `/home/liubingqi/lbq/isaaclab_tutorial_sources/IsaacLab-v2.3.0`.
+  - Clean checkout is `v2.3.0`, commit `3c6e67bb5c7ada942a6d1884ab69338f57596f77`.
+  - Existing experiment checkout `/home/liubingqi/lbq/IsaacLab` is still present but remains only a read-only reference for this repository.
 
 ### Chapter 8 - Isaac Lab Core Workflow
 
@@ -59,8 +59,10 @@ This map covers only the Isaac Lab portion of the book:
   - `source/isaaclab_tasks/isaaclab_tasks/direct/cartpole`
   - `source/isaaclab_tasks/isaaclab_tasks/manager_based/classic/cartpole`
 - Remote validation:
-  - `isaaclab` imports from the remote checkout.
-  - `isaaclab_tasks` import is currently blocked by missing `pxr`.
+  - Chapter 7 uses the clean `v2.3.0` checkout through `PYTHONPATH` when needed.
+  - `./isaaclab.sh --help` and `scripts/demos/multi_asset.py --help` pass on `192.168.2.16`.
+  - Plain Python still cannot import `carb`, `omni`, or `pxr`; those modules are Isaac Sim Kit runtime modules.
+  - Headless `multi_asset.py --num_envs 1` starts Kit but is blocked by `errno=28` file-watch errors on the workstation.
 
 ### Chapter 9.2 - Unitree G1 Locomotion
 
@@ -126,8 +128,10 @@ Commands were run read-only on `192.168.2.16`.
 | --- | --- | --- |
 | `env_isaaclab_2.3_lbq` exists | pass | Listed by conda |
 | `isaacsim==5.1.0.0` installed | pass | `pip show isaacsim` |
-| `isaaclab` import | pass | Imports from `/home/liubingqi/lbq/IsaacLab/source/isaaclab` |
-| `isaaclab_tasks` import | blocked | `ModuleNotFoundError: No module named 'pxr'` |
+| clean IsaacLab checkout | pass | `v2.3.0`, commit `3c6e67bb5c7ada942a6d1884ab69338f57596f77` |
+| `multi_asset.py --help` | pass | Runs through `./isaaclab.sh -p` |
+| plain Python `carb/omni/pxr` | blocked | Runtime modules are not on normal Python path before Kit startup |
+| headless `multi_asset.py` | blocked | Kit starts, then file-watch errors `errno=28`; see chapter evidence |
 | G1 locomotion files | pass | Found in remote IsaacLab checkout |
 | unitree_rl_lab mimic files | blocked | Upstream path exists, sparse remote checkout lacks `source/` |
 

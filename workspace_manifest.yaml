@@ -1,8 +1,8 @@
 project:
   name: isaaclab_tutorial
   purpose: >
-    Management workspace for organizing, explaining, and validating the Isaac
-    Lab related source code referenced by the book.
+    Reader-facing companion repository for organizing, mapping, running, and
+    testing the Isaac Lab related source code referenced by the book.
   book: "具身智能仿真实战：构建、训练与部署.pdf"
   focus_chapters:
     - chapter: 7
@@ -32,6 +32,8 @@ remote_workstation:
   note: "Use for source code checkout, runtime validation, and compute."
   paths:
     isaaclab: "/home/liubingqi/lbq/IsaacLab"
+    isaaclab_clean: "/home/liubingqi/lbq/isaaclab_tutorial_sources/IsaacLab-v2.3.0"
+    isaaclab_tutorial_sources: "/home/liubingqi/lbq/isaaclab_tutorial_sources"
     humanoid_lab: "/home/liubingqi/lbq/humanoid-lab"
     unitree_rl_lab: "/home/liubingqi/lbq/unitree_rl_lab"
     unitree_mujoco: "/home/liubingqi/lbq/unitree_mujoco"
@@ -73,6 +75,17 @@ upstream_sources:
 
 remote_observations:
   date: "2026-06-22"
+  isaaclab_clean:
+    path: "/home/liubingqi/lbq/isaaclab_tutorial_sources/IsaacLab-v2.3.0"
+    remote: "https://github.com/isaac-sim/IsaacLab.git"
+    tag: "v2.3.0"
+    commit: "3c6e67bb5c7ada942a6d1884ab69338f57596f77"
+    status: "clean"
+    found_paths:
+      - "scripts/demos/multi_asset.py"
+      - "scripts/tutorials/02_scene/create_scene.py"
+      - "scripts/reinforcement_learning/rsl_rl/train.py"
+      - "source/isaaclab_tasks/isaaclab_tasks/manager_based/locomotion/velocity/config/g1/__init__.py"
   isaaclab:
     path: "/home/liubingqi/lbq/IsaacLab"
     remote: "https://github.com/isaac-sim/IsaacLab.git"
@@ -125,10 +138,17 @@ validation:
     - check: "unitree_rl_lab mimic path"
       result: "blocked"
       detail: "Upstream path identified, but current remote checkout is sparse and lacks source/"
+    - check: "chapter 7 clean IsaacLab source"
+      result: "pass"
+      detail: "IsaacLab v2.3.0 cloned to /home/liubingqi/lbq/isaaclab_tutorial_sources/IsaacLab-v2.3.0"
+    - check: "chapter 7 demo help"
+      result: "pass"
+      detail: "./isaaclab.sh -p scripts/demos/multi_asset.py --help runs on 192.168.2.16"
+    - check: "chapter 7 headless demo"
+      result: "blocked"
+      detail: "Kit starts, then timeout after errno=28 file-watch errors; see evidence/ch07_isaaclab_intro"
 
 next_steps:
-  - "Resolve IsaacLab checkout/tag mismatch against book target v2.3.0."
+  - "Resolve or work around the 192 inotify/file-watch limit before full headless demo validation."
   - "Materialize unitree_rl_lab source/ path or clone a clean upstream copy for mimic explanation."
-  - "Fix Isaac Sim/pxr import path before running IsaacLab tasks."
-  - "Create chapter-by-chapter code explanation notebooks or Markdown notes."
-  - "Run lightweight task smoke tests on 192.168.2.16 after import path is fixed."
+  - "Continue chapter-by-chapter code structure mapping and lightweight validation."
