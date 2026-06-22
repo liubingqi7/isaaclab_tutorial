@@ -5,6 +5,9 @@
 __pycache__/
 *.py[cod]
 
+# Local git worktrees.
+.worktrees/
+
 # Local editor and OS files.
 .DS_Store
 .vscode/
